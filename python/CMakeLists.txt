@@ -1,0 +1,15 @@
+#include_directories(/usr/include/python3.6)
+#include_directories(/usr/include/python3.8)
+include_directories(/opt/anaconda3/include/python3.8)
+
+#find_library(PYLIB NAMES python3.6m PATHS /usr/lib/python3.6/ )
+#find_library(PYLIB NAMES python3.8 PATHS /usr/lib/python3.8/ )
+find_library(PYLIB NAMES python3.8 PATHS /opt/anaconda3/lib/ )
+
+add_library( pydemo SHARED "PyDemo.cpp" )
+set_property(TARGET pydemo PROPERTY POSITION_INDEPENDENT_CODE ON)
+SET_TARGET_PROPERTIES(pydemo PROPERTIES PREFIX "")
+target_link_libraries( pydemo mathdummystatic mathdummydyn)
+#target_link_libraries( pydemo boost_python37 ${PYLIB} pthread rt dl)
+#target_link_libraries( pydemo boost_python3 ${PYLIB} pthread rt dl)
+target_link_libraries( pydemo boost_python38 ${PYLIB} pthread rt dl)
