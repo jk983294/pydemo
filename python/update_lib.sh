@@ -1,0 +1,1 @@
+cp ../cmake-build-debug/lib/*.so src/demo/
