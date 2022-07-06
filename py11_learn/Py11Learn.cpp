@@ -1,10 +1,20 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 #include <cstdio>
 
 namespace py = pybind11;
 
 int add(int i = 1, int j = 2) {
     return i + j;
+}
+
+std::vector<int> vec_add(const std::vector<int>& a, const std::vector<int>& b) {
+    std::vector<int> ret(a.size(), 0);
+    for (size_t i = 0; i < a.size(); i++) {
+        ret[i] = a[i] + b[i];
+    }
+    return ret;
 }
 
 struct Pet {
@@ -47,6 +57,7 @@ PYBIND11_MODULE(pylearn, m) {
           py::arg("i"), py::arg("j"));
     m.def("default_add", &add, "A function which adds two numbers",
           py::arg("i") = 1, py::arg("j") = 2);
+    m.def("vec_add", &vec_add, "A function that adds two vecs");
 
     py::class_<Pet> pet(m, "Pet", py::dynamic_attr());
     pet.def(py::init<const std::string &>())

@@ -1,10 +1,3 @@
-import os
-import sys
-from pathlib import Path
-_current_root = str(Path(__file__).resolve().parents[1])
-sys.path.append(_current_root + '/cmake-build-debug/lib')
-sys.path.append(_current_root + '/install/lib')
-sys.path.append(_current_root + '/lib')
 import pylearn
 
 
@@ -12,6 +5,7 @@ if __name__ == '__main__':
     print(pylearn.add(1, 2))
     print(pylearn.arg_add(i=1, j=2))
     print(pylearn.default_add())
+    print(pylearn.vec_add([1, 2], [3, 4]))
 
     # class
     p = pylearn.Pet("Molly")

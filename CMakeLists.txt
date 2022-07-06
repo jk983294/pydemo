@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(dummy)
+project(pydemo)
 
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
@@ -16,19 +16,7 @@ message ("cxx Flags: " ${CMAKE_CXX_FLAGS})
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
 
-set(PYTHON_LIBRARY_DIR /opt/anaconda3/lib/python3.8/site-packages)
-set(PYTHON_EXECUTABLE /opt/anaconda3/bin/python)
-
-#include_directories(/usr/include/python3.6)
-#include_directories(/usr/include/python3.8)
-include_directories(/opt/anaconda3/include/python3.8)
-
-#find_library(PYLIB NAMES python3.6m PATHS /usr/lib/python3.6/ )
-#find_library(PYLIB NAMES python3.8 PATHS /usr/lib/python3.8/ )
-message ("SYSTEM_ENVIRONMENT_PATH: " ${SYSTEM_ENVIRONMENT_PATH})
-find_library(PYLIB NAMES python3.8 PATHS /opt/anaconda3/lib/
-        NO_CACHE NO_DEFAULT_PATH)
-message ("PYLIB: " ${PYLIB})
+add_subdirectory(pybind11)
 
 # Source code
 include_directories(include)
@@ -36,5 +24,4 @@ include_directories(include)
 #add_subdirectory(example)
 #add_subdirectory(test)
 add_subdirectory(src)
-#add_subdirectory(py11)
 add_subdirectory(py11_learn)
