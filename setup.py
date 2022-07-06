@@ -2,8 +2,7 @@ import os
 import re
 import subprocess
 import sys
-
-from setuptools import Extension, setup
+from setuptools import Extension, setup, find_packages
 from setuptools.command.build_ext import build_ext
 from setuptools.command import install_lib
 
@@ -146,45 +145,13 @@ class InstallLib(install_lib.install_lib):
             src = os.path.join(dft_lib_dir, lib_)
         else:
             # The library is built by setup.py
-            src = os.path.join(BUILD_TEMP_DIR, lib_)
-        print('Installing shared library:', src)
+            src = os.path.join(BUILD_TEMP_DIR, 'lib', lib_)
+        print('Installing shared library: %s -> %s' % (src, dst))
         dst, _ = self.copy_file(src, dst)
         print('dst:', dst)
         outfiles.append(dst)
-            
         return outfiles
 
-
-class InstallLib1(install_lib.install_lib):
-    def install(self):
-        outfiles = super().install()
-        if outfiles is None:
-            outfiles = []
-        lib_dir = os.path.join(self.install_dir, 'pylearn', 'lib')
-        # print('InstallLib', self.install_dir, lib_dir)
-        if not os.path.exists(lib_dir):
-            os.makedirs(lib_dir)
-
-        global BUILD_TEMP_DIR   # pylint: disable=global-statement
-        libs = ['libmathdummydyn.so', 'pylearn.cpython-38-x86_64-linux-gnu.so']
-
-        dft_lib_dir = os.path.join(CURRENT_DIR, 'install/lib')
-        # build_dir = os.path.join(BUILD_TEMP_DIR, 'pylearn', 'lib')
-        # print('InstallLib', dft_lib_dir, build_dir)
-
-        for lib_ in libs:
-            dst = os.path.join(self.install_dir, 'pylearn', 'lib', lib_)
-            if os.path.exists(os.path.join(dft_lib_dir, lib_)):
-                # The library is built by CMake directly
-                src = os.path.join(dft_lib_dir, lib_)
-            else:
-                # The library is built by setup.py
-                src = os.path.join(BUILD_TEMP_DIR, lib_)
-            print('Installing shared library:', src)
-            dst, _ = self.copy_file(src, dst)
-            print('dst:', dst)
-            outfiles.append(dst)
-        return outfiles
 
 setup(
     name="pylearn",
@@ -199,3 +166,57 @@ setup(
     extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.6",
 )
+
+# class InstallLib1(install_lib.install_lib):
+#     def install(self):
+#         outfiles = super().install()
+#         if outfiles is None:
+#             outfiles = []
+#         lib_dir = self.install_dir
+#         if not os.path.exists(lib_dir):
+#             os.makedirs(lib_dir)
+
+#         global BUILD_TEMP_DIR   # pylint: disable=global-statement
+#         libs = ['libmathdummydyn.so', 'pydemo.cpython-38-x86_64-linux-gnu.so']
+
+#         dft_lib_dir = os.path.join(CURRENT_DIR, 'install/lib')
+
+#         for lib_ in libs:
+#             dst = os.path.join(self.install_dir, lib_)
+#             if os.path.exists(os.path.join(dft_lib_dir, lib_)):
+#                 # The library is built by CMake directly
+#                 src = os.path.join(dft_lib_dir, lib_)
+#             else:
+#                 # The library is built by setup.py
+#                 src = os.path.join(BUILD_TEMP_DIR, 'lib', lib_)
+#             print('Installing shared library: %s -> %s' % (src, dst))
+#             dst1, _ = self.copy_file(src, dst)
+#             outfiles.append(dst1)
+
+#         # change rpath. DO IT MANUALLY!!!
+#         # os.system("patchelf --remove-rpath %s" % dst)
+#         # os.system("patchelf --add-rpath './' %s" % dst)
+#         # os.system("patchelf --add-rpath '\$ORIGIN' %s" % dst)
+#         # os.system("patchelf --remove-needed libmathdummydyn.so %s" % dst)
+#         # os.system("patchelf --add-needed libmathdummydyn.so %s" % dst)
+#         return outfiles
+
+
+# setup(
+#     name="pydemo",
+#     version="0.0.1",
+#     author="kun",
+#     author_email="kun@gmail.com",
+#     description="pydemo",
+#     long_description="pydemo",
+#     ext_modules=[CMakeExtension("pydemo")],
+#     cmdclass={"build_ext": CMakeBuild, 'install_lib': InstallLib1},
+#     packages=find_packages(),
+#     package_data={
+#         "": ["*.so",],
+#     },
+#     include_package_data=True,
+#     zip_safe=False,
+#     extras_require={"test": ["pytest>=6.0"]},
+#     python_requires=">=3.6",
+# )

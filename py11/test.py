@@ -1,10 +1,3 @@
-import os
-import sys
-from pathlib import Path
-_current_root = str(Path(__file__).resolve().parents[1])
-sys.path.append(_current_root + '/cmake-build-debug/lib')
-sys.path.append(_current_root + '/install/lib')
-sys.path.append(_current_root + '/lib')
 import pydemo
 
 
