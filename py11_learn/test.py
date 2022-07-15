@@ -2,6 +2,7 @@ import pylearn
 
 
 if __name__ == '__main__':
+    print(dir(pylearn))
     print(pylearn.add(1, 2))
     print(pylearn.arg_add(i=1, j=2))
     print(pylearn.default_add())
@@ -37,3 +38,6 @@ if __name__ == '__main__':
     p = pylearn.pet_store()
     print(type(p))
     print(p.bark())
+
+    l = pylearn.get_key_value({"a": 1, "b": 2})
+    print(l)

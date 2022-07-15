@@ -17,6 +17,19 @@ std::vector<int> vec_add(const std::vector<int>& a, const std::vector<int>& b) {
     return ret;
 }
 
+py::dict get_key_value(const py::dict& dt) {
+    py::dict ret;
+    std::vector<std::string> keys;
+    std::vector<int> values;
+    for (auto item : dt) { // std::pair<py::handle, py::handle> item
+        keys.push_back(py::cast<std::string>(item.first));
+        values.push_back(py::cast<int>(item.second));
+    }
+    ret["keys"] = keys;
+    ret["values"] = values;
+    return ret;
+}
+
 struct Pet {
     enum Kind {
         Dog = 0,
@@ -58,6 +71,7 @@ PYBIND11_MODULE(pylearn, m) {
     m.def("default_add", &add, "A function which adds two numbers",
           py::arg("i") = 1, py::arg("j") = 2);
     m.def("vec_add", &vec_add, "A function that adds two vecs");
+    m.def("get_key_value", &get_key_value, "get_key_value");
 
     py::class_<Pet> pet(m, "Pet", py::dynamic_attr());
     pet.def(py::init<const std::string &>())
