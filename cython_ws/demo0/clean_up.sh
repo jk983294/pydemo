@@ -1,0 +1,1 @@
+rm -rf build/ *.c *.cpp *.so *.html
